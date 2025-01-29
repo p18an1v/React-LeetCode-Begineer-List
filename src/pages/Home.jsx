@@ -1,8 +1,12 @@
+import Navbar from "@/_compo/Navbar";
+import QuestionList from "@/_compo/QuestionList";
+import Footer from "@/_compo/Footer";
 function Home() {
     return (
-      <div>
-        <h1>Welcome to Home Page</h1>
-      </div>
+      <>
+      <QuestionList />
+      <Footer />
+      </>
     );
   }
   
