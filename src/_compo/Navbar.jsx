@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -8,6 +8,25 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+
+  // Check if the user is logged in on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove the token from localStorage
+    setIsLoggedIn(false);
+    window.location.reload(); // Refresh the page to update the UI
+  };
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-[#09090B] text-[#FAFAFA] shadow-md">
@@ -24,9 +43,18 @@ export default function Navbar() {
         <NavItem to="/about">About</NavItem>
         <NavItem to="/services">Services</NavItem>
         <NavItem to="/contact">Contact</NavItem>
-        <Dialog>
-          <LoginRegisterForm />
-        </Dialog>
+        {isLoggedIn ? (
+          <Button variant="ghost" onClick={handleLogout}>
+            Logout
+          </Button>
+        ) : (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost">Login/Register</Button>
+            </DialogTrigger>
+            <LoginRegisterForm onLogin={handleLogin} />
+          </Dialog>
+        )}
       </div>
 
       {/* Mobile Menu Button */}
@@ -48,9 +76,19 @@ export default function Navbar() {
               <NavItem to="/contact" onClick={() => setOpen(false)}>
                 Contact
               </NavItem>
-              <Dialog>
-                <LoginRegisterForm />
-              </Dialog>
+              {isLoggedIn ? (
+                <Button  onClick={handleLogout}  variant="outline" className="text-[#09090B]">
+                  Logout
+                </Button>
+               
+              ) : (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost">Login/Register</Button>
+                  </DialogTrigger>
+                  <LoginRegisterForm onLogin={handleLogin} />
+                </Dialog>
+              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -72,4 +110,3 @@ function NavItem({ to, children, onClick }) {
     </Link>
   );
 }
-
