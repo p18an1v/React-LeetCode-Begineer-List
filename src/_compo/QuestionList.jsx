@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { getTopics } from "@/services/api"; // Import API function
 
 const QuestionItem = ({ question }) => (
   <Card className="flex items-center p-4 border-muted transition-all hover:bg-muted/50">
@@ -17,6 +18,28 @@ const QuestionItem = ({ question }) => (
 const QuestionList = () => {
   const [openStops, setOpenStops] = useState({});
   const [openLets, setOpenLets] = useState({});
+  const [stops, setStops] = useState([]); // Initialize as an empty array
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getTopics();
+        if (response.data && Array.isArray(response.data)) {
+          setStops(response.data); // Set stops only if the data is an array
+        } else {
+          setError("Invalid data format received from the server.");
+        }
+      } catch (err) {
+        setError("Failed to fetch topics. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const toggleStop = (stopId) => {
     setOpenStops((prev) => ({ ...prev, [stopId]: !prev[stopId] }));
@@ -26,36 +49,20 @@ const QuestionList = () => {
     setOpenLets((prev) => ({ ...prev, [letId]: !prev[letId] }));
   };
 
-  const stops = [
-    {
-      id: 1,
-      title: "Basics",
-      lets: [
-        {
-          id: 1,
-          title: "Let 1: Sorting-!",
-          questions: [
-            { id: 1, title: "Two Sum", level: "Easy" },
-            { id: 2, title: "Bubble Sort", level: "Easy" },
-          ],
-        },
-        {
-          id: 2,
-          title: "Let 2: Sorting-!!",
-          questions: [
-            { id: 3, title: "Merge Sort", level: "Medium" },
-            { id: 4, title: "Quick Sort", level: "Medium" },
-          ],
-        },
-      ],
-    },
-  ];
-
+  // Safely calculate totalQuestions
   const totalQuestions = stops.reduce(
     (total, stop) =>
-      total + stop.lets.reduce((letTotal, letItem) => letTotal + letItem.questions.length, 0),
+      total + (stop.lets || []).reduce((letTotal, letItem) => letTotal + (letItem.questions || []).length, 0),
     0
   );
+
+  if (loading) {
+    return <div className="p-6 text-foreground">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="p-6 bg-background min-h-screen text-foreground">
@@ -85,7 +92,7 @@ const QuestionList = () => {
 
           {openStops[stop.id] && (
             <div className="mt-4 pl-4">
-              {stop.lets.map((letItem) => (
+              {(stop.lets || []).map((letItem) => (
                 <div key={letItem.id} className="mb-4">
                   <Card
                     className="p-4 flex justify-between items-center cursor-pointer transition-all hover:bg-muted/50"
@@ -99,7 +106,7 @@ const QuestionList = () => {
 
                   {openLets[letItem.id] && (
                     <div className="mt-2 space-y-2 pl-4">
-                      {letItem.questions.map((question) => (
+                      {(letItem.questions || []).map((question) => (
                         <QuestionItem key={question.id} question={question} />
                       ))}
                     </div>

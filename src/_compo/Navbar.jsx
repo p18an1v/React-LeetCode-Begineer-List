@@ -49,9 +49,6 @@ export default function Navbar() {
                 Contact
               </NavItem>
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline text-[#09090B]">Login / Register</Button>
-                </DialogTrigger>
                 <LoginRegisterForm />
               </Dialog>
             </div>
