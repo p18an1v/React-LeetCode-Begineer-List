@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import QuestionList from "@/_compo/QuestionList";
 import Footer from "@/_compo/Footer";
-import { getUserDetails } from "/src/services/api.js"; // ✅ Correct import
+import { getUserDetails } from "/src/services/userService.js"; // ✅ Correct import
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));

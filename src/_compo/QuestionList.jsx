@@ -3,27 +3,51 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { getTopics, getUserProgress, trackQuestionProgress } from "@/services/api";
+import { getTopics, getUserProgress, trackQuestionProgress } from "@/services/userService";
 import api from "@/services/api";
 
 const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestionStatus }) => {
   const isCompleted = completedQuestions.includes(question.questionId);
 
+  const getLevelColor = (level) => {
+    switch (level.toLowerCase()) {
+      case "easy":
+        return "text-blue-500";
+      case "medium":
+        return "text-orange-500";
+      case "hard":
+        return "text-red-500";
+      default:
+        return "text-foreground";
+    }
+  };
+
   return (
     <Card className={`flex items-center p-4 border transition-all hover:bg-muted/50 ${isCompleted ? "border-green-500" : "border-muted"}`}>
       {isLoggedIn && (
         <Checkbox
-          id={`question-${question.questionId}`}
-          className="mr-4"
-          checked={isCompleted}
-          onCheckedChange={() => toggleQuestionStatus(question.questionId)}
-        />
+        id={`question-${question.questionId}`}
+        className="mr-4 w-5 h-5"
+        checked={isCompleted}
+        onCheckedChange={(checked) => toggleQuestionStatus(question.questionId, checked)}
+      />
+      
       )}
-      <label htmlFor={`question-${question.questionId}`} className="text-foreground">
-        <a href={question.url} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-500 hover:underline">
+      <label
+         htmlFor={`question-${question.questionId}`}
+         className="text-foreground flex justify-between w-full items-center">
+        <a
+          href={question.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-blue-500 hover:underline">
           {question.questionName}
         </a>
+         <span className={`font-medium ${getLevelColor(question.level)}`}>
+           {question.level}
+          </span>
       </label>
+
     </Card>
   );
 };
@@ -75,20 +99,27 @@ const QuestionList = ({ isLoggedIn, userId }) => {
     setOpenStops((prev) => ({ ...prev, [stopId]: !prev[stopId] }));
   };
 
-  const toggleQuestionStatus = async (questionId) => {
+  const toggleQuestionStatus = async (questionId, checked) => {
+    console.log(`Toggling Question ID: ${questionId}, Checked: ${checked}`);
+  
     try {
-      const isCompleted = completedQuestions.includes(questionId);
-      await trackQuestionProgress(userId, questionId, !isCompleted);
+      await trackQuestionProgress(userId, questionId, checked);
       setCompletedQuestions((prev) =>
-        isCompleted ? prev.filter((id) => id !== questionId) : [...prev, questionId]
+        checked ? [...prev, questionId] : prev.filter((id) => id !== questionId)
       );
     } catch (err) {
       console.error("Error updating question progress:", err);
     }
   };
+  
 
   const totalQuestions = stops.reduce((total, stop) => total + stop.questions.length, 0);
   const completedCount = completedQuestions.length;
+
+  const isTopicCompleted = (questions) => {
+    return questions.every((question) => completedQuestions.includes(question.questionId));
+  };
+
 
   if (loading) {
     return <div className="p-6 text-foreground">Loading...</div>;
@@ -112,7 +143,9 @@ const QuestionList = ({ isLoggedIn, userId }) => {
       {stops.map((stop) => (
         <div key={stop.id} className="mb-6">
           <Card
-            className="p-4 flex justify-between items-center cursor-pointer transition-all hover:bg-muted/50"
+            className={`p-4 flex justify-between items-center cursor-pointer transition-all hover:bg-muted/50 ${
+              isTopicCompleted(stop.questions) ? "border-green-500" : "border-muted"
+            }`}
             onClick={() => toggleStop(stop.id)}
           >
             <CardTitle className="text-xl font-semibold">{stop.title}</CardTitle>
@@ -140,5 +173,3 @@ const QuestionList = ({ isLoggedIn, userId }) => {
 };
 
 export default QuestionList;
-
-

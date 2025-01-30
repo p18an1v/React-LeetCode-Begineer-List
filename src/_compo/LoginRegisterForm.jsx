@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { login, register, forgotPassword, resetPassword } from "@/services/api";
+import { login, register, forgotPassword, resetPassword } from "@/services/authService";
 
 const LoginRegisterForm = React.forwardRef(({ onLogin }, ref) => {
   const [formType, setFormType] = useState("login"); // "login" | "register" | "forgot" | "reset"
@@ -56,7 +56,7 @@ const LoginRegisterForm = React.forwardRef(({ onLogin }, ref) => {
         localStorage.setItem("token", response.data.token); // Store token
         alert("Login successful!");
         if (onLogin) onLogin(); // Call the onLogin prop to update the Navbar
-        // window.location.reload(); // Refresh the page to update the UI
+        window.location.reload(); // Refresh the page to update the UI
       }
     } catch (err) {
       console.error("API Error:", err);
