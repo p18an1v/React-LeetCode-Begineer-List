@@ -44,15 +44,16 @@ export default function Navbar() {
         <NavItem to="/services">Services</NavItem>
         <NavItem to="/contact">Contact</NavItem>
         {isLoggedIn ? (
-          <Button variant="ghost" onClick={handleLogout}>
+          <Button  onClick={handleLogout}  variant="outline" className="text-[#09090B]">
             Logout
           </Button>
         ) : (
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost">Login/Register</Button>
+              {/* <Button variant="ghost">Login/Register</Button> */}
+              <LoginRegisterForm onLogin={handleLogin} />
             </DialogTrigger>
-            <LoginRegisterForm onLogin={handleLogin} />
+            
           </Dialog>
         )}
       </div>

@@ -3,31 +3,54 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { getTopics } from "@/services/api"; // Import API function
+import { getTopics, getUserProgress, trackQuestionProgress } from "@/services/api";
+import api from "@/services/api";
 
-const QuestionItem = ({ question }) => (
-  <Card className="flex items-center p-4 border-muted transition-all hover:bg-muted/50">
-    <Checkbox id={`question-${question.id}`} className="mr-4" />
-    <label htmlFor={`question-${question.id}`} className="text-foreground">
-      <span className="font-medium">{question.title}</span> -
-      <span className="font-semibold text-primary ml-1">{question.level}</span>
-    </label>
-  </Card>
-);
+const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestionStatus }) => {
+  const isCompleted = completedQuestions.includes(question.questionId);
 
-const QuestionList = () => {
+  return (
+    <Card className={`flex items-center p-4 border transition-all hover:bg-muted/50 ${isCompleted ? "border-green-500" : "border-muted"}`}>
+      {isLoggedIn && (
+        <Checkbox
+          id={`question-${question.questionId}`}
+          className="mr-4"
+          checked={isCompleted}
+          onCheckedChange={() => toggleQuestionStatus(question.questionId)}
+        />
+      )}
+      <label htmlFor={`question-${question.questionId}`} className="text-foreground">
+        <a href={question.url} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-500 hover:underline">
+          {question.questionName}
+        </a>
+      </label>
+    </Card>
+  );
+};
+
+const QuestionList = ({ isLoggedIn, userId }) => {
   const [openStops, setOpenStops] = useState({});
-  const [openLets, setOpenLets] = useState({});
-  const [stops, setStops] = useState([]); // Initialize as an empty array
+  const [stops, setStops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [completedQuestions, setCompletedQuestions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getTopics();
         if (response.data && Array.isArray(response.data)) {
-          setStops(response.data); // Set stops only if the data is an array
+          const topicsWithQuestions = await Promise.all(
+            response.data.map(async (topic) => {
+              const questionsResponse = await api.get(`/topics/${topic.id}/questions`);
+              return {
+                id: topic.id,
+                title: topic.dataStructure,
+                questions: questionsResponse.data || [],
+              };
+            })
+          );
+          setStops(topicsWithQuestions);
         } else {
           setError("Invalid data format received from the server.");
         }
@@ -37,24 +60,35 @@ const QuestionList = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn && userId) {
+      getUserProgress(userId).then((response) => {
+        setCompletedQuestions(response.data.completedQuestions || []);
+      });
+    }
+  }, [isLoggedIn, userId]);
 
   const toggleStop = (stopId) => {
     setOpenStops((prev) => ({ ...prev, [stopId]: !prev[stopId] }));
   };
 
-  const toggleLet = (letId) => {
-    setOpenLets((prev) => ({ ...prev, [letId]: !prev[letId] }));
+  const toggleQuestionStatus = async (questionId) => {
+    try {
+      const isCompleted = completedQuestions.includes(questionId);
+      await trackQuestionProgress(userId, questionId, !isCompleted);
+      setCompletedQuestions((prev) =>
+        isCompleted ? prev.filter((id) => id !== questionId) : [...prev, questionId]
+      );
+    } catch (err) {
+      console.error("Error updating question progress:", err);
+    }
   };
 
-  // Safely calculate totalQuestions
-  const totalQuestions = stops.reduce(
-    (total, stop) =>
-      total + (stop.lets || []).reduce((letTotal, letItem) => letTotal + (letItem.questions || []).length, 0),
-    0
-  );
+  const totalQuestions = stops.reduce((total, stop) => total + stop.questions.length, 0);
+  const completedCount = completedQuestions.length;
 
   if (loading) {
     return <div className="p-6 text-foreground">Loading...</div>;
@@ -66,7 +100,6 @@ const QuestionList = () => {
 
   return (
     <div className="p-6 bg-background min-h-screen text-foreground">
-      {/* Hero Section */}
       <Card className="relative p-6 bg-muted rounded-md shadow-lg mb-6">
         <CardHeader>
           <CardTitle className="text-4xl font-bold text-primary">Welcome to LeetCode Tracker</CardTitle>
@@ -75,9 +108,7 @@ const QuestionList = () => {
           </p>
         </CardHeader>
       </Card>
-
-      {/* Question List */}
-      <h2 className="text-2xl font-bold mb-4">Your Progress: 0/{totalQuestions}</h2>
+      <h2 className="text-2xl font-bold mb-4">Your Progress: {completedCount}/{totalQuestions}</h2>
       {stops.map((stop) => (
         <div key={stop.id} className="mb-6">
           <Card
@@ -89,29 +120,16 @@ const QuestionList = () => {
               {openStops[stop.id] ? <ChevronDown /> : <ChevronRight />}
             </Button>
           </Card>
-
           {openStops[stop.id] && (
-            <div className="mt-4 pl-4">
-              {(stop.lets || []).map((letItem) => (
-                <div key={letItem.id} className="mb-4">
-                  <Card
-                    className="p-4 flex justify-between items-center cursor-pointer transition-all hover:bg-muted/50"
-                    onClick={() => toggleLet(letItem.id)}
-                  >
-                    <CardTitle className="text-lg font-medium">{letItem.title}</CardTitle>
-                    <Button variant="ghost" size="icon">
-                      {openLets[letItem.id] ? <ChevronDown /> : <ChevronRight />}
-                    </Button>
-                  </Card>
-
-                  {openLets[letItem.id] && (
-                    <div className="mt-2 space-y-2 pl-4">
-                      {(letItem.questions || []).map((question) => (
-                        <QuestionItem key={question.id} question={question} />
-                      ))}
-                    </div>
-                  )}
-                </div>
+            <div className="mt-4 pl-4 space-y-2">
+              {stop.questions.map((question) => (
+                <QuestionItem
+                  key={question.questionId}
+                  question={question}
+                  isLoggedIn={isLoggedIn}
+                  completedQuestions={completedQuestions}
+                  toggleQuestionStatus={toggleQuestionStatus}
+                />
               ))}
             </div>
           )}
@@ -122,3 +140,5 @@ const QuestionList = () => {
 };
 
 export default QuestionList;
+
+

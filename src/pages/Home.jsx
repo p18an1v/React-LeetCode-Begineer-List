@@ -1,14 +1,28 @@
-import Navbar from "@/_compo/Navbar";
+import { useState, useEffect } from "react";
 import QuestionList from "@/_compo/QuestionList";
 import Footer from "@/_compo/Footer";
+import { getUserDetails } from "/src/services/api.js"; // ✅ Correct import
+
 function Home() {
-    return (
-      <>
-      <QuestionList />
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getUserDetails()
+        .then((user) => setUserId(user.id)) // ✅ Extract `id` from API response
+        .catch((error) => console.error("Error fetching user details:", error));
+    }
+  }, [isLoggedIn]);
+
+  return (
+    <>
+      <QuestionList isLoggedIn={isLoggedIn} userId={userId} />
       <Footer />
-      </>
-    );
-  }
-  
-  export default Home;  // ✅ Ensure this line is present
-  
+    </>
+  );
+}
+
+export default Home;
+
+

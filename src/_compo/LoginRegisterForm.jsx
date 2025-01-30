@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Dialog,
@@ -11,9 +11,9 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { login, register, forgotPassword, resetPassword } from "@/services/api"; // Import resetPassword API function
+import { login, register, forgotPassword, resetPassword } from "@/services/api";
 
-export default function LoginRegisterForm({ onLogin }) {
+const LoginRegisterForm = React.forwardRef(({ onLogin }, ref) => {
   const [formType, setFormType] = useState("login"); // "login" | "register" | "forgot" | "reset"
   const [error, setError] = useState("");
   const [resetToken, setResetToken] = useState(""); // Store the reset token
@@ -55,8 +55,8 @@ export default function LoginRegisterForm({ onLogin }) {
         console.log("Login Response:", response.data);
         localStorage.setItem("token", response.data.token); // Store token
         alert("Login successful!");
-        if (onLogin) onLogin(); 
-        window.location.reload(); // Refresh the page to update the UI
+        if (onLogin) onLogin(); // Call the onLogin prop to update the Navbar
+        // window.location.reload(); // Refresh the page to update the UI
       }
     } catch (err) {
       console.error("API Error:", err);
@@ -71,7 +71,7 @@ export default function LoginRegisterForm({ onLogin }) {
           Login / Register
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-sm bg-white rounded-lg shadow-lg p-6">
+      <DialogContent ref={ref} className="max-w-sm bg-white rounded-lg shadow-lg p-6">
         <DialogHeader>
           <DialogTitle className="text-black">
             {formType === "login"
@@ -94,7 +94,6 @@ export default function LoginRegisterForm({ onLogin }) {
         </DialogHeader>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Email Field (for Login, Register, and Forgot Password) */}
           {(formType === "login" || formType === "register" || formType === "forgot") && (
             <div>
               <Label className="text-black">Email</Label>
@@ -107,7 +106,6 @@ export default function LoginRegisterForm({ onLogin }) {
             </div>
           )}
 
-          {/* Password Fields (for Login and Register) */}
           {(formType === "login" || formType === "register") && (
             <>
               <div>
@@ -122,7 +120,6 @@ export default function LoginRegisterForm({ onLogin }) {
                 {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
               </div>
 
-              {/* Confirm Password (Only for Register) */}
               {formType === "register" && (
                 <div>
                   <Label className="text-black">Confirm Password</Label>
@@ -140,37 +137,31 @@ export default function LoginRegisterForm({ onLogin }) {
             </>
           )}
 
-          {/* New Password and Token Fields (for Reset Password) */}
-{formType === "reset" && (
-  <>
-    {/* Token Field */}
-    <div>
-      <Label className="text-black">Token</Label>
-      <Input
-        type="text"
-        {...formRegister("token", {
-          required: "Token is required",
-        })}
-      />
-      {errors.token && <p className="text-red-500 text-sm">{errors.token.message}</p>}
-    </div>
+          {formType === "reset" && (
+            <>
+              <div>
+                <Label className="text-black">Token</Label>
+                <Input
+                  type="text"
+                  {...formRegister("token", { required: "Token is required" })}
+                />
+                {errors.token && <p className="text-red-500 text-sm">{errors.token.message}</p>}
+              </div>
 
-    {/* New Password Field */}
-    <div>
-      <Label className="text-black">New Password</Label>
-      <Input
-        type="password"
-        {...formRegister("newPassword", {
-          required: "New Password is required",
-          minLength: { value: 6, message: "Password must be at least 6 characters" },
-        })}
-      />
-      {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
-    </div>
-  </>
-)}
+              <div>
+                <Label className="text-black">New Password</Label>
+                <Input
+                  type="password"
+                  {...formRegister("newPassword", {
+                    required: "New Password is required",
+                    minLength: { value: 6, message: "Password must be at least 6 characters" },
+                  })}
+                />
+                {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword.message}</p>}
+              </div>
+            </>
+          )}
 
-          {/* Submit Button */}
           <Button type="submit" className="w-full">
             {formType === "login"
               ? "Login"
@@ -182,7 +173,6 @@ export default function LoginRegisterForm({ onLogin }) {
           </Button>
         </form>
 
-        {/* Toggle Between Forms */}
         <div className="text-center text-sm text-black mt-4">
           {formType === "login" ? (
             <>
@@ -216,4 +206,6 @@ export default function LoginRegisterForm({ onLogin }) {
       </DialogContent>
     </Dialog>
   );
-}
+});
+
+export default LoginRegisterForm;
