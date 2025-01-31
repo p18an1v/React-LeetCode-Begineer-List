@@ -20,10 +20,13 @@ const AdminPage = () => {
   const [isPatternModalOpen, setIsPatternModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [isUpdateTopicModalOpen, setIsUpdateTopicModalOpen] = useState(false);
+  const [isUpdatePatternModalOpen, setIsUpdatePatternModalOpen] = useState(false);
   const [isUpdateQuestionModalOpen, setIsUpdateQuestionModalOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [updatedTopicName, setUpdatedTopicName] = useState("");
+  const [updatedPatternName, setUpdatedPatternName] = useState("");
   const [currentTopicId, setCurrentTopicId] = useState(null);
+  const [currentPatternId, setCurrentPatternId] = useState(null);
 
   useEffect(() => {
     fetchTopics();
@@ -57,10 +60,15 @@ const AdminPage = () => {
 
   /** ✅ Fetch Questions by Pattern */
   const fetchQuestionsByPattern = async (patternId) => {
-    const response = await api.get(`${API_AUTH_URL}/patterns/${patternId}/questions`);
-    setQuestions(response.data);
-    setSelectedPattern(patternId);
-    setSelectedTopic(null); // Clear selected topic
+    try {
+      const response = await api.get(`${API_AUTH_URL}/patterns/${patternId}/questions`);
+      setQuestions(response.data);
+      setSelectedPattern(patternId);
+      setSelectedTopic(null); // Clear selected topic
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      alert("Failed to fetch questions. Please check your internet connection or try again later.");
+    }
   };
 
   /** ✅ Add a Topic */
@@ -70,17 +78,17 @@ const AdminPage = () => {
     setNewTopic("");
     setIsTopicModalOpen(false);
     fetchTopics();
-    // Set the newly added topic as the selected topic
-    setSelectedTopic(response.data.id); // Assuming the API returns the newly created topic with its ID
+    setSelectedTopic(response.data.id); // Set the newly added topic as the selected topic
   };
 
   /** ✅ Add a Pattern */
   const addPattern = async () => {
     if (!newPattern.trim()) return;
-    await api.post(`${API_ADMIN_URL}/patterns`, { pattern: newPattern, questionsList: [] });
+    const response = await api.post(`${API_ADMIN_URL}/patterns`, { pattern: newPattern, questionsList: [] });
     setNewPattern("");
     setIsPatternModalOpen(false);
     fetchPatterns();
+    setSelectedPattern(response.data.id); // Set the newly added pattern as the selected pattern
   };
 
   /** ✅ Delete a Topic */
@@ -89,6 +97,15 @@ const AdminPage = () => {
     fetchTopics();
     if (selectedTopic === id) {
       setSelectedTopic(null); // Clear selected topic if it was deleted
+    }
+  };
+
+  /** ✅ Delete a Pattern */
+  const deletePattern = async (id) => {
+    await api.delete(`${API_ADMIN_URL}/patterns/${id}`);
+    fetchPatterns();
+    if (selectedPattern === id) {
+      setSelectedPattern(null); // Clear selected pattern if it was deleted
     }
   };
 
@@ -105,6 +122,19 @@ const AdminPage = () => {
     }
   };
 
+  /** ✅ Update Pattern */
+  const updatePattern = async () => {
+    if (!updatedPatternName.trim()) return;
+    try {
+      await api.put(`${API_ADMIN_URL}/patterns/${currentPatternId}`, { pattern: updatedPatternName });
+      setUpdatedPatternName("");
+      setIsUpdatePatternModalOpen(false);
+      fetchPatterns();
+    } catch (error) {
+      console.error("Error updating pattern:", error);
+    }
+  };
+
   /** ✅ Open Update Topic Modal */
   const openUpdateTopicModal = (topicId, currentName) => {
     setCurrentTopicId(topicId);
@@ -112,10 +142,11 @@ const AdminPage = () => {
     setIsUpdateTopicModalOpen(true);
   };
 
-  /** ✅ Delete a Pattern */
-  const deletePattern = async (id) => {
-    await api.delete(`${API_ADMIN_URL}/patterns/${id}`);
-    fetchPatterns();
+  /** ✅ Open Update Pattern Modal */
+  const openUpdatePatternModal = (patternId, currentName) => {
+    setCurrentPatternId(patternId);
+    setUpdatedPatternName(currentName);
+    setIsUpdatePatternModalOpen(true);
   };
 
   /** ✅ Add a Question to Topic */
@@ -127,19 +158,39 @@ const AdminPage = () => {
     fetchQuestionsByTopic(selectedTopic);
   };
 
+  /** ✅ Add a Question to Pattern */
+  const addQuestionToPattern = async () => {
+    if (!selectedPattern) return;
+    await api.post(`${API_ADMIN_URL}/patterns/${selectedPattern}/questions`, newQuestion);
+    setNewQuestion({ questionName: "", url: "", level: "", dataStructure: "" });
+    setIsQuestionModalOpen(false);
+    fetchQuestionsByPattern(selectedPattern);
+  };
+
   /** ✅ Delete a Question from Topic */
   const deleteQuestionFromTopic = async (questionId) => {
     await api.delete(`${API_ADMIN_URL}/topics/${selectedTopic}/questions/${questionId}`);
     fetchQuestionsByTopic(selectedTopic);
   };
 
+  /** ✅ Delete a Question from Pattern */
+  const deleteQuestionFromPattern = async (questionId) => {
+    await api.delete(`${API_ADMIN_URL}/patterns/${selectedPattern}/questions/${questionId}`);
+    fetchQuestionsByPattern(selectedPattern);
+  };
+
   /** ✅ Update a Question */
   const updateQuestion = async () => {
     if (!currentQuestion) return;
     try {
-      await api.put(`${API_ADMIN_URL}/topics/${selectedTopic}/questions/${currentQuestion.questionId}`, currentQuestion);
+      if (selectedTopic) {
+        await api.put(`${API_ADMIN_URL}/topics/${selectedTopic}/questions/${currentQuestion.questionId}`, currentQuestion);
+        fetchQuestionsByTopic(selectedTopic);
+      } else if (selectedPattern) {
+        await api.put(`${API_ADMIN_URL}/patterns/${selectedPattern}/questions/${currentQuestion.questionId}`, currentQuestion);
+        fetchQuestionsByPattern(selectedPattern);
+      }
       setIsUpdateQuestionModalOpen(false);
-      fetchQuestionsByTopic(selectedTopic);
     } catch (error) {
       console.error("Error updating question:", error);
     }
@@ -206,6 +257,7 @@ const AdminPage = () => {
                 <TableRow key={pattern.id}>
                   <TableCell>{pattern.pattern}</TableCell>
                   <TableCell>
+                    <Button variant="ghost" onClick={() => openUpdatePatternModal(pattern.id, pattern.pattern)}><Edit /></Button>
                     <Button variant="ghost" onClick={() => deletePattern(pattern.id)}><Trash /></Button>
                     <Button variant="ghost" onClick={() => fetchQuestionsByPattern(pattern.id)}>View Questions</Button>
                   </TableCell>
@@ -216,13 +268,20 @@ const AdminPage = () => {
         </CardContent>
       </Card>
 
-      {/* Questions Table */}
       {/* Questions Section */}
-      {selectedTopic && (
+      {(selectedTopic || selectedPattern) && (
         <Card className="mb-4">
           <CardHeader>
             <CardTitle>Questions</CardTitle>
-            <Button onClick={() => setIsQuestionModalOpen(true)}>Add Question</Button>
+            <div className="flex gap-4">
+               {selectedTopic ? (
+                <Button onClick={() => setSelectedTopic(null)}>Back to Topics</Button>
+               ) : (
+                <Button onClick={() => setSelectedPattern(null)}>Back to Patterns</Button>
+               )}
+                <Button onClick={() => setIsQuestionModalOpen(true)}>Add Question</Button>
+            </div>
+            
           </CardHeader>
           <CardContent>
             {questions.length > 0 ? (
@@ -245,14 +304,14 @@ const AdminPage = () => {
                       <TableCell>{question.dataStructure}</TableCell>
                       <TableCell>
                         <Button variant="ghost" onClick={() => openUpdateQuestionModal(question)}><Edit /></Button>
-                        <Button variant="ghost" onClick={() => deleteQuestionFromTopic(question.questionId)}><Trash /></Button>
+                        <Button variant="ghost" onClick={() => selectedTopic ? deleteQuestionFromTopic(question.questionId) : deleteQuestionFromPattern(question.questionId)}><Trash /></Button>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             ) : (
-              <p>No questions found for this topic. Click "Add Question" to add one.</p>
+              <p>No questions found. Click "Add Question" to add one.</p>
             )}
           </CardContent>
         </Card>
@@ -303,6 +362,21 @@ const AdminPage = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Update Pattern Modal */}
+      <Dialog open={isUpdatePatternModalOpen} onOpenChange={setIsUpdatePatternModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Pattern</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder="Enter Updated Pattern Name"
+            value={updatedPatternName}
+            onChange={(e) => setUpdatedPatternName(e.target.value)}
+          />
+          <Button onClick={updatePattern}>Update Pattern</Button>
+        </DialogContent>
+      </Dialog>
+
       {/* Add Question Modal */}
       <Dialog open={isQuestionModalOpen} onOpenChange={setIsQuestionModalOpen}>
         <DialogContent>
@@ -329,7 +403,7 @@ const AdminPage = () => {
             value={newQuestion.dataStructure}
             onChange={(e) => setNewQuestion({ ...newQuestion, dataStructure: e.target.value })}
           />
-          <Button onClick={addQuestionToTopic}>Add Question</Button>
+          <Button onClick={selectedTopic ? addQuestionToTopic : addQuestionToPattern}>Add Question</Button>
         </DialogContent>
       </Dialog>
 
