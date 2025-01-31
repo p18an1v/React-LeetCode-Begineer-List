@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";  // ✅ Correct Import
-import Navbar from "./_compo/Navbar";
+// import Navbar from "./_compo/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import PageNotFound from "./pages/PageNotFound";
@@ -10,7 +11,7 @@ import Admin from "./pages/Admin";
 function App() {
   return (
     <Router>  {/* ✅ Ensure BrowserRouter wraps your app */}
-      <Navbar />
+    <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
