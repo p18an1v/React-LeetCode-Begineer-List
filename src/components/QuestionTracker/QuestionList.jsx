@@ -86,7 +86,7 @@ const QuestionList = ({ isLoggedIn, userId }) => {
   }
 
   return (
-    <div className="p-6 bg-background min-h-screen text-foreground">
+    <div className="p-6 bg-[#D3D4DD] min-h-screen text-foreground">
       <ProgressCard completedCount={completedCount} totalQuestions={totalQuestions} />
       <TopicPatternDropdown selectedType={selectedType} setSelectedType={setSelectedType} />
       {stops.map((stop) => (

@@ -74,6 +74,7 @@ export default function Navbar() {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex space-x-8 text-lg">
+        {!isAdmin && <NavItem to="/home">Home</NavItem>}
         {!isAdmin && <NavItem to="/about">About</NavItem>}
         {!isAdmin && <NavItem to="/services">Services</NavItem>}
         {!isAdmin && <NavItem to="/contact">Contact</NavItem>}

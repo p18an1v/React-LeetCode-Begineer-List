@@ -19,7 +19,7 @@ const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestion
   };
 
   return (
-    <Card className={`flex items-center p-4 border transition-all hover:bg-muted/50 ${isCompleted ? "border-green-500" : "border-muted"}`}>
+    <Card className={`flex items-center p-5 border transition-all hover:bg-muted/50 ${isCompleted ? "border-green-600" : "border-muted"}`}>
       {isLoggedIn && (
         <Checkbox
           id={`question-${question.questionId}`}

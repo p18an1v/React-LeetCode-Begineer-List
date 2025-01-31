@@ -1,4 +1,4 @@
-import Footer from "@/_compo/Footer";
+import Footer from "@/components/Footer/Footer";
 import React from "react";
 
 const About = () => {
@@ -22,33 +22,36 @@ const About = () => {
       image: "https://i.pinimg.com/236x/0a/45/ee/0a45eede9944f1d8790bb8efcb82f6ac.jpg", // Replace with your image
     },
     {
-      title: "Stay Motivated",
+      title: "Community Support",
       description:
-        "Visualize your growth and stay consistent in solving problems to ace your coding interviews.",
+        "Join a community of like-minded coders to share tips, solutions, and motivation.",
       image: "https://i.pinimg.com/236x/d5/3c/50/d53c50d147efd26c59588c7669f7c876.jpg", // Replace with your image
     },
     {
-      title: "Stay Motivated",
+      title: "Personalized Learning",
       description:
-        "Visualize your growth and stay consistent in solving problems to ace your coding interviews.",
-      image: "https://via.placeholder.com/300x200?text=Stay+Motivated", // Replace with your image
+        "Get tailored recommendations based on your progress and areas of improvement.",
+      image: "https://via.placeholder.com/300x200?text=Personalized+Learning", // Replace with your image
+    },
+    {
+      title: "Interview Preparation",
+      description:
+        "Practice real interview questions and improve your problem-solving speed and accuracy.",
+      image: "https://via.placeholder.com/300x200?text=Interview+Prep", // Replace with your image
     },
   ];
 
   return (
-    <div className="bg-[#09090B] text-[#FAFAFA] min-h-screen flex flex-col">
-      {/* Include the Navbar component */}
-      
-
+    <div className="bg-[#D3D4DD] text-black min-h-screen  flex flex-col">
       {/* Main Content */}
       <main className="flex-grow p-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-            About LeetCode Tracker
+            About LeetCode Beginner List
           </h1>
-          <p className="text-lg max-w-3xl mx-auto text-[#A0A0A0]">
-            LeetCode Tracker is your ultimate companion to streamline coding
+          <p className="text-lg max-w-3xl mx-auto text-gray-700">
+            LeetCode Beginner List is your ultimate companion to streamline coding
             practice and track progress effectively. Dive into structured
             questions, stay organized, and elevate your problem-solving skills!
           </p>
@@ -59,24 +62,37 @@ const About = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-[#09090B] rounded-lg shadow-lg overflow-hidden  border border-[#FAFAFA] transform hover:scale-105 transition-transform"
+              className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 transform hover:scale-105 transition-transform duration-300"
             >
               <img
                 src={feature.image}
                 alt={feature.title}
                 className="w-full h-48 object-cover"
               />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{feature.title}</h2>
-                <p className="text-[#A0A0A0]">{feature.description}</p>
+              <div className="p-6">
+                <h2 className="text-xl font-semibold mb-2 text-black">{feature.title}</h2>
+                <p className="text-gray-700">{feature.description}</p>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Call-to-Action Section */}
+        <div className="mt-16 text-center">
+          <h2 className="text-3xl font-bold mb-4 text-black">
+            Ready to Start Your Coding Journey?
+          </h2>
+          <p className="text-lg text-gray-700 mb-6">
+            Join thousands of developers who are improving their skills with LeetCode Beginner List.
+          </p>
+          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300">
+            Get Started Now
+          </button>
+        </div>
       </main>
 
       {/* Include the Footer component */}
-      <Footer/>
+      <Footer />
     </div>
   );
 };
