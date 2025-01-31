@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash, Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import TopicsTable from "@/components/admin/TopicsTable";
+import PatternsTable from "@/components/admin/PatternsTable";
+import QuestionsTable from "@/components/admin/QuestionsTable";
+import AddTopicModal from "@/components/admin/AddTopicModal";
+import UpdateTopicModal from "@/components/admin/UpdateTopicModal";
+import AddPatternModal from "@/components/admin/AddPatternModal";
+import UpdatePatternModal from "@/components/admin/UpdatePatternModal";
+import AddQuestionModal from "@/components/admin/AddQuestionModal";
+import UpdateQuestionModal from "@/components/admin/UpdateQuestionModal";
 import api, { API_ADMIN_URL, API_AUTH_URL } from "@/services/api";
 
 const AdminPage = () => {
@@ -218,26 +223,12 @@ const AdminPage = () => {
       <Card className="mb-4">
         <CardHeader><CardTitle>Topics</CardTitle></CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Topic</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {topics.map((topic) => (
-                <TableRow key={topic.id}>
-                  <TableCell>{topic.dataStructure}</TableCell>
-                  <TableCell>
-                    <Button variant="ghost" onClick={() => openUpdateTopicModal(topic.id, topic.dataStructure)}><Edit /></Button>
-                    <Button variant="ghost" onClick={() => deleteTopic(topic.id)}><Trash /></Button>
-                    <Button variant="ghost" onClick={() => fetchQuestionsByTopic(topic.id)}>View Questions</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <TopicsTable
+            topics={topics}
+            openUpdateTopicModal={openUpdateTopicModal}
+            deleteTopic={deleteTopic}
+            fetchQuestionsByTopic={fetchQuestionsByTopic}
+          />
         </CardContent>
       </Card>
 
@@ -245,26 +236,12 @@ const AdminPage = () => {
       <Card className="mb-4">
         <CardHeader><CardTitle>Patterns</CardTitle></CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Pattern</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {patterns.map((pattern) => (
-                <TableRow key={pattern.id}>
-                  <TableCell>{pattern.pattern}</TableCell>
-                  <TableCell>
-                    <Button variant="ghost" onClick={() => openUpdatePatternModal(pattern.id, pattern.pattern)}><Edit /></Button>
-                    <Button variant="ghost" onClick={() => deletePattern(pattern.id)}><Trash /></Button>
-                    <Button variant="ghost" onClick={() => fetchQuestionsByPattern(pattern.id)}>View Questions</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <PatternsTable
+            patterns={patterns}
+            openUpdatePatternModal={openUpdatePatternModal}
+            deletePattern={deletePattern}
+            fetchQuestionsByPattern={fetchQuestionsByPattern}
+          />
         </CardContent>
       </Card>
 
@@ -274,42 +251,23 @@ const AdminPage = () => {
           <CardHeader>
             <CardTitle>Questions</CardTitle>
             <div className="flex gap-4">
-               {selectedTopic ? (
+              {selectedTopic ? (
                 <Button onClick={() => setSelectedTopic(null)}>Back to Topics</Button>
-               ) : (
+              ) : (
                 <Button onClick={() => setSelectedPattern(null)}>Back to Patterns</Button>
-               )}
-                <Button onClick={() => setIsQuestionModalOpen(true)}>Add Question</Button>
+              )}
+              <Button onClick={() => setIsQuestionModalOpen(true)}>Add Question</Button>
             </div>
-            
           </CardHeader>
           <CardContent>
             {questions.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Question Name</TableHead>
-                    <TableHead>URL</TableHead>
-                    <TableHead>Level</TableHead>
-                    <TableHead>Data Structure</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {questions.map((question) => (
-                    <TableRow key={question.questionId}>
-                      <TableCell>{question.questionName}</TableCell>
-                      <TableCell>{question.url}</TableCell>
-                      <TableCell>{question.level}</TableCell>
-                      <TableCell>{question.dataStructure}</TableCell>
-                      <TableCell>
-                        <Button variant="ghost" onClick={() => openUpdateQuestionModal(question)}><Edit /></Button>
-                        <Button variant="ghost" onClick={() => selectedTopic ? deleteQuestionFromTopic(question.questionId) : deleteQuestionFromPattern(question.questionId)}><Trash /></Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <QuestionsTable
+                questions={questions}
+                openUpdateQuestionModal={openUpdateQuestionModal}
+                deleteQuestionFromTopic={deleteQuestionFromTopic}
+                deleteQuestionFromPattern={deleteQuestionFromPattern}
+                selectedTopic={selectedTopic}
+              />
             ) : (
               <p>No questions found. Click "Add Question" to add one.</p>
             )}
@@ -317,125 +275,56 @@ const AdminPage = () => {
         </Card>
       )}
 
-      {/* Add Topic Modal */}
-      <Dialog open={isTopicModalOpen} onOpenChange={setIsTopicModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Topic</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Enter Topic Name"
-            value={newTopic}
-            onChange={(e) => setNewTopic(e.target.value)}
-          />
-          <Button onClick={addTopic}>Add Topic</Button>
-        </DialogContent>
-      </Dialog>
+      {/* Modals */}
+      <AddTopicModal
+        isOpen={isTopicModalOpen}
+        onOpenChange={setIsTopicModalOpen}
+        newTopic={newTopic}
+        setNewTopic={setNewTopic}
+        addTopic={addTopic}
+      />
 
-      {/* Update Topic Modal */}
-      <Dialog open={isUpdateTopicModalOpen} onOpenChange={setIsUpdateTopicModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Topic</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Enter Updated Topic Name"
-            value={updatedTopicName}
-            onChange={(e) => setUpdatedTopicName(e.target.value)}
-          />
-          <Button onClick={updateTopic}>Update Topic</Button>
-        </DialogContent>
-      </Dialog>
+      <UpdateTopicModal
+        isOpen={isUpdateTopicModalOpen}
+        onOpenChange={setIsUpdateTopicModalOpen}
+        updatedTopicName={updatedTopicName}
+        setUpdatedTopicName={setUpdatedTopicName}
+        updateTopic={updateTopic}
+      />
 
-      {/* Add Pattern Modal */}
-      <Dialog open={isPatternModalOpen} onOpenChange={setIsPatternModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Pattern</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Enter Pattern Name"
-            value={newPattern}
-            onChange={(e) => setNewPattern(e.target.value)}
-          />
-          <Button onClick={addPattern}>Add Pattern</Button>
-        </DialogContent>
-      </Dialog>
+      <AddPatternModal
+        isOpen={isPatternModalOpen}
+        onOpenChange={setIsPatternModalOpen}
+        newPattern={newPattern}
+        setNewPattern={setNewPattern}
+        addPattern={addPattern}
+      />
 
-      {/* Update Pattern Modal */}
-      <Dialog open={isUpdatePatternModalOpen} onOpenChange={setIsUpdatePatternModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Pattern</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Enter Updated Pattern Name"
-            value={updatedPatternName}
-            onChange={(e) => setUpdatedPatternName(e.target.value)}
-          />
-          <Button onClick={updatePattern}>Update Pattern</Button>
-        </DialogContent>
-      </Dialog>
+      <UpdatePatternModal
+        isOpen={isUpdatePatternModalOpen}
+        onOpenChange={setIsUpdatePatternModalOpen}
+        updatedPatternName={updatedPatternName}
+        setUpdatedPatternName={setUpdatedPatternName}
+        updatePattern={updatePattern}
+      />
 
-      {/* Add Question Modal */}
-      <Dialog open={isQuestionModalOpen} onOpenChange={setIsQuestionModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Question</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Question Name"
-            value={newQuestion.questionName}
-            onChange={(e) => setNewQuestion({ ...newQuestion, questionName: e.target.value })}
-          />
-          <Input
-            placeholder="URL"
-            value={newQuestion.url}
-            onChange={(e) => setNewQuestion({ ...newQuestion, url: e.target.value })}
-          />
-          <Input
-            placeholder="Level"
-            value={newQuestion.level}
-            onChange={(e) => setNewQuestion({ ...newQuestion, level: e.target.value })}
-          />
-          <Input
-            placeholder="Data Structure"
-            value={newQuestion.dataStructure}
-            onChange={(e) => setNewQuestion({ ...newQuestion, dataStructure: e.target.value })}
-          />
-          <Button onClick={selectedTopic ? addQuestionToTopic : addQuestionToPattern}>Add Question</Button>
-        </DialogContent>
-      </Dialog>
+      <AddQuestionModal
+        isOpen={isQuestionModalOpen}
+        onOpenChange={setIsQuestionModalOpen}
+        newQuestion={newQuestion}
+        setNewQuestion={setNewQuestion}
+        addQuestionToTopic={addQuestionToTopic}
+        addQuestionToPattern={addQuestionToPattern}
+        selectedTopic={selectedTopic}
+      />
 
-      {/* Update Question Modal */}
-      <Dialog open={isUpdateQuestionModalOpen} onOpenChange={setIsUpdateQuestionModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Question</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder="Question Name"
-            value={currentQuestion?.questionName || ""}
-            onChange={(e) => setCurrentQuestion({ ...currentQuestion, questionName: e.target.value })}
-          />
-          <Input
-            placeholder="URL"
-            value={currentQuestion?.url || ""}
-            onChange={(e) => setCurrentQuestion({ ...currentQuestion, url: e.target.value })}
-          />
-          <Input
-            placeholder="Level"
-            value={currentQuestion?.level || ""}
-            onChange={(e) => setCurrentQuestion({ ...currentQuestion, level: e.target.value })}
-          />
-          <Input
-            placeholder="Data Structure"
-            value={currentQuestion?.dataStructure || ""}
-            onChange={(e) => setCurrentQuestion({ ...currentQuestion, dataStructure: e.target.value })}
-          />
-          <Button onClick={updateQuestion}>Update Question</Button>
-        </DialogContent>
-      </Dialog>
+      <UpdateQuestionModal
+        isOpen={isUpdateQuestionModalOpen}
+        onOpenChange={setIsUpdateQuestionModalOpen}
+        currentQuestion={currentQuestion}
+        setCurrentQuestion={setCurrentQuestion}
+        updateQuestion={updateQuestion}
+      />
     </div>
   );
 };

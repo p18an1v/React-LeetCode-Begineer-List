@@ -1,4 +1,3 @@
-import Footer from "@/_compo/Footer";
 import AdminPage from "@/_compo/AdminPage";
 function Admin() {
     return (
