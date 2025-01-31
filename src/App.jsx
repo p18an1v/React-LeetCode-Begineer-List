@@ -5,6 +5,7 @@ import About from "./pages/About";
 import PageNotFound from "./pages/PageNotFound";
 import LoginRegisterForm from "./_compo/LoginRegisterForm";
 import Admin from "./pages/Admin";
+import AdminPanel from "./_compo/AdminPanel";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/about" element={<About />} />
         <Route path="/Login" element={<LoginRegisterForm />} />
+        <Route path="/admin/panel" element={<AdminPanel />} />
       </Routes>
     </Router>
   );

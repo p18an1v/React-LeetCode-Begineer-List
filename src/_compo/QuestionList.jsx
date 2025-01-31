@@ -66,7 +66,7 @@ const QuestionList = ({ isLoggedIn, userId }) => {
         if (response.data && Array.isArray(response.data)) {
           const topicsWithQuestions = await Promise.all(
             response.data.map(async (topic) => {
-              const questionsResponse = await api.get(`/topics/${topic.id}/questions`);
+              const questionsResponse = await api.get(`auth/topics/${topic.id}/questions`);
               return {
                 id: topic.id,
                 title: topic.dataStructure,

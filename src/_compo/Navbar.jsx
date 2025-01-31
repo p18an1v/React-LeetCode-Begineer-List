@@ -1,30 +1,64 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import LoginRegisterForm from "./LoginRegisterForm";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+ // Import jwt-decode
+import { jwtDecode } from "jwt-decode";
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
-  // Check if the user is logged in on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
-      setIsLoggedIn(true);
+      try {
+        const decodedToken = jwtDecode(token); // Decode JWT
+        setIsLoggedIn(true);
+
+        if (decodedToken.role === "ROLE_ADMIN") {
+          setIsAdmin(true);
+          navigate("/admin"); // Redirect admin to admin panel
+        }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem("token"); // Remove invalid token
+      }
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token); // Decode token after login
+        setIsLoggedIn(true);
+
+        if (decodedToken.role === "ADMIN") {
+          setIsAdmin(true);
+          navigate("/admin"); // Redirect admin to admin panel
+        }
+        
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+      window.location.reload(); // Refresh the page to update the UI
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove the token from localStorage
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
+    setIsAdmin(false);
+    navigate("/"); // Redirect to home
     window.location.reload(); // Refresh the page to update the UI
   };
 
@@ -40,25 +74,24 @@ export default function Navbar() {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex space-x-8 text-lg">
-        <NavItem to="/about">About</NavItem>
-        <NavItem to="/services">Services</NavItem>
-        <NavItem to="/contact">Contact</NavItem>
+        {!isAdmin && <NavItem to="/about">About</NavItem>}
+        {!isAdmin && <NavItem to="/services">Services</NavItem>}
+        {!isAdmin && <NavItem to="/contact">Contact</NavItem>}
+
         {isLoggedIn ? (
-          <Button  onClick={handleLogout}  variant="outline" className="text-[#09090B]">
+          <Button onClick={handleLogout} variant="outline" className="text-[#09090B]">
             Logout
           </Button>
         ) : (
           <Dialog>
             <DialogTrigger asChild>
-              {/* <Button variant="ghost">Login/Register</Button> */}
               <LoginRegisterForm onLogin={handleLogin} />
             </DialogTrigger>
-            
           </Dialog>
         )}
       </div>
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu */}
       <div className="md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
@@ -68,20 +101,14 @@ export default function Navbar() {
           </SheetTrigger>
           <SheetContent side="left" className="bg-[#09090B] text-[#FAFAFA]">
             <div className="flex flex-col space-y-6 text-lg p-4">
-              <NavItem to="/about" onClick={() => setOpen(false)}>
-                About
-              </NavItem>
-              <NavItem to="/services" onClick={() => setOpen(false)}>
-                Services
-              </NavItem>
-              <NavItem to="/contact" onClick={() => setOpen(false)}>
-                Contact
-              </NavItem>
+              {!isAdmin && <NavItem to="/about" onClick={() => setOpen(false)}>About</NavItem>}
+              {!isAdmin && <NavItem to="/services" onClick={() => setOpen(false)}>Services</NavItem>}
+              {!isAdmin && <NavItem to="/contact" onClick={() => setOpen(false)}>Contact</NavItem>}
+
               {isLoggedIn ? (
-                <Button  onClick={handleLogout}  variant="outline" className="text-[#09090B]">
+                <Button onClick={handleLogout} variant="outline" className="text-[#09090B]">
                   Logout
                 </Button>
-               
               ) : (
                 <Dialog>
                   <DialogTrigger asChild>
@@ -98,7 +125,7 @@ export default function Navbar() {
   );
 }
 
-// Reusable NavItem Component for smoother UI
+// Reusable NavItem Component
 function NavItem({ to, children, onClick }) {
   return (
     <Link
@@ -111,3 +138,4 @@ function NavItem({ to, children, onClick }) {
     </Link>
   );
 }
+

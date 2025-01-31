@@ -4,7 +4,6 @@ function Admin() {
     return (
       <>
       <AdminPage />
-      <Footer />
       </>
     );
   }
