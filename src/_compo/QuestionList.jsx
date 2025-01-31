@@ -67,6 +67,7 @@ const QuestionList = ({ isLoggedIn, userId }) => {
           const topicsWithQuestions = await Promise.all(
             response.data.map(async (topic) => {
               const questionsResponse = await api.get(`auth/topics/${topic.id}/questions`);
+              // const questionsResponse = await api.get(`auth/patterns/${pattern.id}/questions`);
               return {
                 id: topic.id,
                 title: topic.dataStructure,

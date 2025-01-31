@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import QuestionList from "@/_compo/QuestionList";
+// import QuestionList from "@/_compo/QuestionList";
+import QuestionList from "@/components/QuestionTracker/QuestionList";
 import Footer from "@/_compo/Footer";
 import { getUserDetails } from "/src/services/userService.js"; // ✅ Correct import
 
