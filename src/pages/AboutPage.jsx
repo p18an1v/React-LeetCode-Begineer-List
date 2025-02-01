@@ -22,23 +22,10 @@ const About = () => {
       image: "https://i.pinimg.com/236x/0a/45/ee/0a45eede9944f1d8790bb8efcb82f6ac.jpg", // Replace with your image
     },
     {
-      title: "Community Support",
-      description:
-        "Join a community of like-minded coders to share tips, solutions, and motivation.",
-      image: "https://i.pinimg.com/236x/d5/3c/50/d53c50d147efd26c59588c7669f7c876.jpg", // Replace with your image
-    },
-    {
       title: "Personalized Learning",
-      description:
-        "Get tailored recommendations based on your progress and areas of improvement.",
-      image: "https://via.placeholder.com/300x200?text=Personalized+Learning", // Replace with your image
-    },
-    {
-      title: "Interview Preparation",
-      description:
-        "Practice real interview questions and improve your problem-solving speed and accuracy.",
-      image: "https://via.placeholder.com/300x200?text=Interview+Prep", // Replace with your image
-    },
+      description: "Simplified journey to start Leetcoding.",
+      image: "https://i.pinimg.com/236x/f2/df/90/f2df902adfb9b5548c91a9055977aa56.jpg", // Replace with your image
+    }    
   ];
 
   return (
