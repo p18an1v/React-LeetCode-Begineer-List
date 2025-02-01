@@ -31,7 +31,7 @@ const Contact = () => {
               href="mailto:support@leetcodebeginnerlist.com"
               className="text-blue-600 hover:text-blue-800 font-semibold text-base sm:text-lg"
             >
-              support@leetcodebeginnerlist.com
+              p18an1v@gmail.com
             </a>
           </div>
           <p className="text-gray-600 mt-5 sm:mt-6">
