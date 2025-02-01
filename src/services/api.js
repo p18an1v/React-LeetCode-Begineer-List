@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const API_AUTH_URL = `${API_BASE_URL}/auth`;
 const API_USER_URL = `${API_BASE_URL}/user`;
 const API_ADMIN_URL = `${API_BASE_URL}/admin`
