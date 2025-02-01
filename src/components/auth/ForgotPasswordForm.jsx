@@ -37,7 +37,7 @@ const ForgotPasswordForm = ({ setFormType, setError, setResetToken }) => {
         <Label className="text-black">Email</Label>
         <Input
           type="email"
-          placeholder="m@example.com"
+          placeholder="Email"
           {...register("email", { required: "Email is required" })}
           disabled={loading}
         />
@@ -45,7 +45,7 @@ const ForgotPasswordForm = ({ setFormType, setError, setResetToken }) => {
       </div>
 
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Sending..." : "Send Reset Token"}
+        {loading ? "Token Sending..." : "Send Reset Token To Email"}
       </Button>
 
       <div className="text-center text-sm text-black mt-4">

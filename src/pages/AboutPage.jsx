@@ -1,30 +1,39 @@
 import Footer from "@/components/Footer/Footer";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
   const features = [
     {
       title: "Track Your Progress",
       description:
         "Easily monitor your coding journey with structured question sets and clear progress tracking.",
-      image: "https://i.pinimg.com/236x/cc/1e/d3/cc1ed3abb2f2f31481be2f393ce18384.jpg", // Replace with your image
+      image: "https://i.pinimg.com/736x/cc/1e/d3/cc1ed3abb2f2f31481be2f393ce18384.jpg", // Replace with your image
     },
     {
       title: "Organized Practice",
       description:
         "Questions are categorized by topics and difficulty levels to help you practice systematically.",
-      image: "https://i.pinimg.com/736x/2d/8f/71/2d8f7105d2930ce8fd6afefa089ad5e0.jpg", // Replace with your image
+      image:"https://i.pinimg.com/736x/de/09/ea/de09eab8e382aaeeccb8fdccfefd42e4.jpg",
+     // image: " https://i.pinimg.com/736x/ff/97/ed/ff97eda583f171e719fec7aecca5f9af.jpg", // Replace with your image
     },
     {
       title: "Stay Motivated",
       description:
         "Visualize your growth and stay consistent in solving problems to ace your coding interviews.",
-      image: "https://i.pinimg.com/236x/0a/45/ee/0a45eede9944f1d8790bb8efcb82f6ac.jpg", // Replace with your image
+      image: "https://i.pinimg.com/736x/b9/34/1a/b9341af03a32f4f0ea953f70c48dbf70.jpg", // Replace with your image
+    },
+    {
+      title: "Community Support",
+      description:
+        "Join a community of like-minded coders to share tips, solutions, and motivation.",
+      image: "https://i.pinimg.com/736x/68/84/ca/6884cab532309cae58ba45bbd3aa30cd.jpg", // Replace with your image
     },
     {
       title: "Personalized Learning",
       description: "Simplified journey to start Leetcoding.",
-      image: "https://i.pinimg.com/236x/f2/df/90/f2df902adfb9b5548c91a9055977aa56.jpg", // Replace with your image
+      image: "https://i.pinimg.com/736x/ec/71/98/ec71986452fb1011f045515b34e590b2.jpg", // Replace with your image
     }    
   ];
 
@@ -72,7 +81,7 @@ const About = () => {
           <p className="text-lg text-gray-700 mb-6">
             Join thousands of developers who are improving their skills with LeetCode Beginner List.
           </p>
-          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300">
+          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300"  onClick={() => navigate("/questions")}>
             Get Started Now
           </button>
         </div>

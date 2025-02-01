@@ -42,6 +42,7 @@ const ResetPasswordForm = ({ setFormType, setError, resetToken }) => {
         <Label className="text-black">New Password</Label>
         <Input
           type="password"
+          placeholder="New Password"
           {...register("newPassword", {
             required: "New Password is required",
             minLength: { value: 6, message: "Password must be at least 6 characters" },
