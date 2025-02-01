@@ -1,4 +1,4 @@
-import Footer from "@/_compo/Footer";
+import Footer from "@/components/Footer/Footer";
 import React from "react";
 import { Mail, Headset, Lightbulb, Users } from "lucide-react";
 

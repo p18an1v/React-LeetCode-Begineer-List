@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { register } from "@/services/authService";
+import { register as registerUser } from "@/services/authService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisterForm = ({ setFormType, setError }) => {
   const {
@@ -16,11 +18,13 @@ const RegisterForm = ({ setFormType, setError }) => {
   const onSubmit = async (data) => {
     setError("");
     try {
-      const response = await register(data.email, data.password);
-      alert("Registration successful! Please login.");
+      await registerUser(data.email, data.password);
+      toast.success("Registration successful! Please login.");
       setFormType("login");
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred. Please try again.");
+      const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

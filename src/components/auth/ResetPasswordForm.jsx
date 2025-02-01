@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { resetPassword } from "@/services/authService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ResetPasswordForm = ({ setFormType, setError, resetToken }) => {
   const {
@@ -15,11 +17,13 @@ const ResetPasswordForm = ({ setFormType, setError, resetToken }) => {
   const onSubmit = async (data) => {
     setError("");
     try {
-      const response = await resetPassword(resetToken, data.newPassword);
-      alert("Password reset successful! Please login.");
+      await resetPassword(resetToken, data.newPassword);
+      toast.success("Password reset successful! Please login.");
       setFormType("login");
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred. Please try again.");
+      const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

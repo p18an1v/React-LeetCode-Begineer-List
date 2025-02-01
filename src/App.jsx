@@ -1,16 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";  // ✅ Correct Import
-// import Navbar from "./_compo/Navbar";
 import Navbar from "./components/Navbar/Navbar";
 import QuestionsPage from "./pages/QuestionsPage";
 import AboutPage from "./pages/AboutPage";
-import LoginRegisterForm from "./_compo/LoginRegisterForm";
+import LoginRegisterForm from "./components/auth/LoginRegisterForm";
 import AdminPage from "./pages/AdminPage";
 import ErrorPage from "./pages/ErrorPage";
 import ContactPage from "./pages/ContactPage";
 import LandingPage from "./pages/LandingPage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
+    
     <Router>  {/* ✅ Ensure BrowserRouter wraps your app */}
     <Navbar />
     <div className="pt-16">
@@ -26,6 +27,7 @@ function App() {
           <Route path="/error" element={<ErrorPage code={500} />} />
         </Routes>
       </div>
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </Router>
   );
 }

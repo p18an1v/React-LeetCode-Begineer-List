@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { login } from "@/services/authService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginForm = ({ onLogin, setFormType, setError }) => {
   const {
@@ -17,11 +19,14 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
     try {
       const response = await login(data.email, data.password);
       localStorage.setItem("token", response.data.token);
-      alert("Login successful!");
       if (onLogin) onLogin();
+     
       window.location.reload();
+     // toast.success("Login successful!");
     } catch (err) {
-      setError(err.response?.data?.message || "An error occurred. Please try again.");
+      const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -69,3 +74,4 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
 };
 
 export default LoginForm;
+

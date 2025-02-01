@@ -6,6 +6,9 @@ import QuestionItem from "./QuestionItem";
 import StopCard from "./StopCard";
 import ProgressCard from "./ProgressCard";
 import TopicPatternDropdown from "./TopicPatternDropdown";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const QuestionList = ({ isLoggedIn, userId }) => {
   const [openStops, setOpenStops] = useState({});
@@ -14,6 +17,8 @@ const QuestionList = ({ isLoggedIn, userId }) => {
   const [error, setError] = useState("");
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [selectedType, setSelectedType] = useState("topics");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +44,7 @@ const QuestionList = ({ isLoggedIn, userId }) => {
           setError("Invalid data format received from the server.");
         }
       } catch (err) {
+        navigate("/error");
         setError("Failed to fetch data. Please try again.");
       } finally {
         setLoading(false);
@@ -49,9 +55,13 @@ const QuestionList = ({ isLoggedIn, userId }) => {
 
   useEffect(() => {
     if (isLoggedIn && userId) {
-      getUserProgress(userId).then((response) => {
-        setCompletedQuestions(response.data.completedQuestions || []);
-      });
+      getUserProgress(userId)
+        .then((response) => {
+          setCompletedQuestions(response.data.completedQuestions || []);
+        })
+        .catch((err) => {
+          console.error("Error fetching user progress:", err);
+        });
     }
   }, [isLoggedIn, userId]);
 
@@ -65,8 +75,10 @@ const QuestionList = ({ isLoggedIn, userId }) => {
       setCompletedQuestions((prev) =>
         checked ? [...prev, questionId] : prev.filter((id) => id !== questionId)
       );
+      toast.success(`${checked ? "Marked As Completed" : "Marked As Incomplete"}`);
     } catch (err) {
       console.error("Error updating question progress:", err);
+      toast.error("Failed to update question progress.");
     }
   };
 
