@@ -28,7 +28,7 @@ const Contact = () => {
           </p>
           <div className="bg-gray-200 p-3 sm:p-4 rounded-lg inline-block hover:bg-gray-300 transition duration-300">
             <a
-              href="mailto:support@leetcodebeginnerlist.com"
+              href="mailto:p18an1v@gmail.com"
               className="text-blue-600 hover:text-blue-800 font-semibold text-base sm:text-lg"
             >
               p18an1v@gmail.com
