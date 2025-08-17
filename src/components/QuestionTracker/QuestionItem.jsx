@@ -2,7 +2,12 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 
-const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestionStatus }) => {
+const QuestionItem = ({
+  question,
+  isLoggedIn,
+  completedQuestions,
+  toggleQuestionStatus,
+}) => {
   const isCompleted = completedQuestions.includes(question.questionId);
 
   const getLevelColor = (level) => {
@@ -14,20 +19,29 @@ const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestion
       case "hard":
         return "text-red-500";
       default:
-        return "text-foreground";
+        return "text-purple-500";
     }
   };
 
   return (
-    <Card className={`flex items-center p-5 border transition-all hover:bg-muted/50 ${isCompleted ? "border-green-600" : "border-muted"}`}>
+    <Card
+      className={`flex items-center p-5 bg-black transition-all 
+              border border-transparent hover:border-white/60 
+              ${isCompleted ? "border-white/40" : "border-transparent"}`}
+    >
       {isLoggedIn && (
         <Checkbox
           id={`question-${question.questionId}`}
-          className="mr-4 w-5 h-5"
+          className="mr-4 w-5 h-5 border-2 border-white 
+                 data-[state=unchecked]:bg-black 
+                 data-[state=checked]:bg-white data-[state=checked]:text-black"
           checked={isCompleted}
-          onCheckedChange={(checked) => toggleQuestionStatus(question.questionId, checked)}
+          onCheckedChange={(checked) =>
+            toggleQuestionStatus(question.questionId, checked)
+          }
         />
       )}
+
       <label
         htmlFor={`question-${question.questionId}`}
         className="text-foreground flex justify-between w-full items-center"
@@ -36,7 +50,7 @@ const QuestionItem = ({ question, isLoggedIn, completedQuestions, toggleQuestion
           href={question.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-medium text-blue-500 hover:underline"
+          className="font-medium text-white hover:underline"
         >
           {question.questionName}
         </a>

@@ -17,7 +17,8 @@ function App() {
     <div className="pt-16">
         {/* Add consistent top padding */}
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          {/* <Route path="/" element={<LandingPage />} /> */}
+          <Route path="/" element={<QuestionsPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/Login" element={<LoginRegisterForm />} />

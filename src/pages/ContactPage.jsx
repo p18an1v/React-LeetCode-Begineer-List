@@ -4,93 +4,112 @@ import { Mail, Headset, Lightbulb, Users } from "lucide-react";
 
 const Contact = () => {
   return (
-    <div className="bg-gradient-to-b from-gray-100 to-gray-300 text-black min-h-screen flex flex-col">
+    <div className="bg-black text-white min-h-screen flex flex-col">
       {/* Main Content */}
-      <main className="flex-grow p-6 sm:p-10">
+      <main className="flex-grow p-6 sm:p-12">
         {/* Hero Section */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-            Contact Us
-          </h1>
-          <p className="text-base sm:text-lg max-w-3xl mx-auto text-gray-600 leading-relaxed">
-            Have questions, feedback, or need support? We're here to help! Reach out to us via email, and we'll get back to you as soon as possible.
-          </p>
-        </div>
-
-        {/* Contact Information Section */}
-        <div className="bg-white/70 backdrop-blur-lg rounded-xl shadow-lg p-6 sm:p-8 max-w-xl mx-auto text-center">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4 text-black flex items-center justify-center gap-2">
-            <Mail className="text-blue-500" size={24} />
+        <div className="text-center mb-14">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
             Get in Touch
-          </h2>
-          <p className="text-gray-600 mb-5 sm:mb-6">
-            If you have any inquiries or need assistance, feel free to email us at:
-          </p>
-          <div className="bg-gray-200 p-3 sm:p-4 rounded-lg inline-block hover:bg-gray-300 transition duration-300">
-            <a
-              href="mailto:p18an1v@gmail.com"
-              className="text-blue-600 hover:text-blue-800 font-semibold text-base sm:text-lg"
-            >
-              p18an1v@gmail.com
-            </a>
-          </div>
-          <p className="text-gray-600 mt-5 sm:mt-6">
-            We aim to respond within <span className="font-semibold text-blue-500">24 hours.</span>
+          </h1>
+          <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            Have questions, ideas, or need support? We’re just one email away.
+            Let’s make your coding journey smoother and more exciting.
           </p>
         </div>
 
-        {/* Additional Content Section */}
-        <div className="mt-12 sm:mt-16 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-5 text-black">
-            Why Contact Us?
+        {/* Email Section */}
+        <div className="bg-black border border-gray-800 rounded-2xl shadow-lg p-8 sm:p-10 max-w-2xl mx-auto mb-16 text-center relative">
+  <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+    <Mail className="text-cyan-400" size={26} />
+    Email Us
+  </h2>
+  <p className="text-gray-400 mb-6">
+    For inquiries or assistance, reach us at:
+  </p>
+
+  {/* Email + Copy */}
+  <div className="flex items-center justify-center gap-3 bg-black px-4 py-3 rounded-xl border border-gray-700 hover:border-cyan-400 transition">
+    <a
+      href="mailto:p18an1v@gmail.com"
+      className="text-cyan-400 hover:text-cyan-300 font-medium text-lg"
+    >
+      p18an1v@gmail.com
+    </a>
+    <button
+      onClick={() => navigator.clipboard.writeText("p18an1v@gmail.com")}
+      className="px-3 py-1.5 text-sm bg-cyan-500 hover:bg-cyan-600 text-white rounded-md transition"
+    >
+      Copy
+    </button>
+  </div>
+
+  {/* Reply Note */}
+  {/* <p className="text-gray-400 mt-5 text-sm">
+    We usually reply within{" "}
+    <span className="text-cyan-400 font-semibold">24 hours</span>.
+  </p> */}
+</div>
+
+
+        {/* Why Contact Us Section */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+            Why Reach Out?
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-            Whether you're facing issues, have suggestions, or just want to connect, we’d love to hear from you! Your feedback helps improve LeetCode Beginner List.
+          <p className="text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+            Whether you’re stuck, inspired, or curious—we’d love to hear from
+            you. Your voice helps us shape the future of LeetCode Beginner List.
           </p>
+        </div>
 
-          {/* Responsive Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {/* Support Card */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-md p-5 sm:p-6 hover:shadow-lg transition duration-300">
-              <div className="flex items-center justify-center mb-3 sm:mb-4">
-                <Headset className="text-blue-500" size={28} />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">Support</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Need help with your account or technical issues? We’re here to assist you.
-              </p>
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Support */}
+          <div className="bg-gray-900/80 border border-gray-700 rounded-2xl p-6 hover:border-cyan-400 hover:shadow-cyan-400/30 transition">
+            <div className="flex items-center justify-center mb-4">
+              <Headset className="text-cyan-400" size={32} />
             </div>
+            <h3 className="text-xl font-semibold mb-2">Support</h3>
+            <p className="text-gray-400 text-sm sm:text-base">
+              Facing technical issues or account problems? Our team is ready to
+              help you out.
+            </p>
+          </div>
 
-            {/* Feedback Card */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-md p-5 sm:p-6 hover:shadow-lg transition duration-300">
-              <div className="flex items-center justify-center mb-3 sm:mb-4">
-                <Lightbulb className="text-yellow-500" size={28} />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">Feedback</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Share your thoughts to help us improve the platform and add new features.
-              </p>
+          {/* Feedback */}
+          <div className="bg-gray-900/80 border border-gray-700 rounded-2xl p-6 hover:border-yellow-400 hover:shadow-yellow-400/30 transition">
+            <div className="flex items-center justify-center mb-4">
+              <Lightbulb className="text-yellow-400" size={32} />
             </div>
+            <h3 className="text-xl font-semibold mb-2">Feedback</h3>
+            <p className="text-gray-400 text-sm sm:text-base">
+              Share your thoughts to help us improve features and make coding
+              practice better.
+            </p>
+          </div>
 
-            {/* Partnership Card */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-md p-5 sm:p-6 hover:shadow-lg transition duration-300">
-              <div className="flex items-center justify-center mb-3 sm:mb-4">
-                <Users className="text-green-500" size={28} />
-              </div>
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">Partnerships</h3>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Interested in collaborating? Let’s create something amazing together.
-              </p>
+          {/* Partnerships */}
+          <div className="bg-gray-900/80 border border-gray-700 rounded-2xl p-6 hover:border-green-400 hover:shadow-green-400/30 transition">
+            <div className="flex items-center justify-center mb-4">
+              <Users className="text-green-400" size={32} />
             </div>
+            <h3 className="text-xl font-semibold mb-2">Partnerships</h3>
+            <p className="text-gray-400 text-sm sm:text-base">
+              Looking to collaborate or build together? We’re open to exciting
+              opportunities.
+            </p>
           </div>
         </div>
       </main>
 
-      {/* Include the Footer component */}
+      {/* Footer */}
       <Footer />
     </div>
   );
 };
 
 export default Contact;
+
+
 

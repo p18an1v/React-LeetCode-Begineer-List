@@ -15,10 +15,10 @@ function QuestionsPage() {
   }, [isLoggedIn]);
 
   return (
-    <div className="min-h-screen p-6 sm:p-10 shadow-md flex flex-col bg-[#D3D4DD]">
+    <div className="min-h-screen p-6 sm:p-10 shadow-md flex flex-col bg-black">
       {/* Main Content */}
       <main className="flex-grow">
-        <div className="container mx-auto px-4 sm:px-8 py-6">
+        <div className="container mx-auto px-4 sm:px-8 py-6 bg-black">
           <QuestionList isLoggedIn={isLoggedIn} userId={userId} />
         </div>
       </main>

@@ -90,15 +90,22 @@ const QuestionList = ({ isLoggedIn, userId }) => {
   };
 
   if (loading) {
-    return <div className="p-6 text-foreground">Loading...</div>;
-  }
+  return (
+    <div className="flex justify-center items-center space-x-2 p-6">
+  <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
+  <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.2s]"></span>
+  <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.4s]"></span>
+</div>
+
+  );
+}
 
   if (error) {
     return <div className="p-6 text-red-500">{error}</div>;
   }
 
   return (
-    <div className="p-6 bg-[#D3D4DD] min-h-screen text-foreground">
+    <div className="p-6 bg-black min-h-screen bg-black text-foreground">
       <ProgressCard completedCount={completedCount} totalQuestions={totalQuestions} />
       <TopicPatternDropdown selectedType={selectedType} setSelectedType={setSelectedType} />
       {stops.map((stop) => (

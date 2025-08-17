@@ -6,14 +6,21 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 const StopCard = ({ stop, isOpen, isCompleted, toggleStop }) => {
   return (
     <Card
-      className={`p-4 flex justify-between items-center cursor-pointer transition-all hover:bg-muted/50 ${
-        isCompleted ? "border-green-500" : "border-muted"
-      }`}
       onClick={toggleStop}
+      className={`p-4 flex justify-between items-center cursor-pointer transition-all 
+                  bg-black border border-transparent hover:border-white/60 
+                  ${isCompleted ? "border-white/40" : "border-transparent"}`}
     >
-      <CardTitle className="text-xl font-semibold">{stop.title}</CardTitle>
+      <CardTitle className="text-xl font-semibold text-white">
+        {stop.title}
+      </CardTitle>
+
       <Button variant="ghost" size="icon">
-        {isOpen ? <ChevronDown /> : <ChevronRight />}
+        {isOpen ? (
+          <ChevronDown className="text-white" />
+        ) : (
+          <ChevronRight className="text-white" />
+        )}
       </Button>
     </Card>
   );
