@@ -5,17 +5,17 @@ export default function Footer() {
   return (
     <footer className="bg-[#09090B] text-[#FAFAFA] py-12 mt-16">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:pl-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 md:pl-8 text-center md:text-left">
           {/* About Section */}
-          <div className="text-center md:text-left">
+          <div>
             <h3 className="text-xl font-bold mb-4">About</h3>
-            <p className="text-gray-400">
+            <p className="text-gray-400 leading-relaxed text-sm sm:text-base">
               Path2DSA List helps you monitor your progress on Leetcode problems from basic to advanced level and improve your coding skills.
             </p>
           </div>
 
           {/* Quick Links Section */}
-          {/* <div className="text-center md:text-left">
+          {/* <div>
             <h3 className="text-xl font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <FooterLink to="/about">About</FooterLink>
@@ -25,15 +25,16 @@ export default function Footer() {
             </ul>
           </div> */}
 
-          <div className="text-center md:text-left">
+          {/* Contact Section */}
+          <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <ul className="space-y-2">
-               <p className="text-gray-400">p18an1v@gmail.com</p>
+              <p className="text-gray-400 text-sm sm:text-base">p18an1v@gmail.com</p>
             </ul>
           </div>
 
           {/* Resources Section */}
-          <div className="text-center md:text-left">
+          <div>
             <h3 className="text-xl font-bold mb-4">Resources</h3>
             <ul className="space-y-2">
               <FooterLink to="/faq">FAQ</FooterLink>
@@ -43,9 +44,9 @@ export default function Footer() {
           </div>
 
           {/* Social Media Section */}
-          <div className="text-center md:text-left">
+          <div>
             <h3 className="text-xl font-bold mb-4">Follow Us</h3>
-            <div className="flex justify-center md:justify-start space-x-4">
+            <div className="flex justify-center md:justify-start space-x-6">
               <SocialIcon href="https://github.com" Icon={Github} />
               <SocialIcon href="https://linkedin.com" Icon={Linkedin} />
               {/* <SocialIcon href="https://twitter.com" Icon={Twitter} /> */}
@@ -55,8 +56,8 @@ export default function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-gray-800 mt-8 pt-6 text-center">
-          <p className="text-gray-400">
+        <div className="border-t border-gray-800 mt-12 pt-6 text-center">
+          <p className="text-gray-400 text-sm sm:text-base">
             &copy; {new Date().getFullYear()} Path2DSA List. All rights reserved.
           </p>
         </div>
@@ -70,7 +71,7 @@ function FooterLink({ to, children }) {
     <li>
       <Link
         to={to}
-        className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+        className="block py-1 text-gray-400 hover:text-blue-400 transition-colors duration-300 text-sm sm:text-base"
       >
         {children}
       </Link>
@@ -87,7 +88,7 @@ function SocialIcon({ href, Icon }) {
       {...(!isMail && { target: "_blank", rel: "noopener noreferrer" })}
       className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
     >
-      <Icon className="w-6 h-6" />
+      <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
     </a>
   );
 }

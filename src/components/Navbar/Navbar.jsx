@@ -107,9 +107,9 @@ export default function Navbar() {
             <SheetContent side="left" className="bg-[#09090B]/90 text-[#FAFAFA] backdrop-blur-sm">
               <div className="flex flex-col space-y-6 text-lg p-4">
                 {!isAdmin && <NavItem to="/" onClick={() => setOpen(false)}>Home</NavItem>}
-                {!isAdmin && <NavItem to="/about" onClick={() => setOpen(false)}>About</NavItem>}
+                {/* {!isAdmin && <NavItem to="/about" onClick={() => setOpen(false)}>About</NavItem>} */}
                 {!isAdmin && <NavItem to="/questions" onClick={() => setOpen(false)}>Questions</NavItem>}
-                {!isAdmin && <NavItem to="/contact" onClick={() => setOpen(false)}>Contact</NavItem>}
+                {/* {!isAdmin && <NavItem to="/contact" onClick={() => setOpen(false)}>Contact</NavItem>} */}
 
                 {isLoggedIn ? (
                   <Button onClick={handleLogout} variant="outline" className="text-[#09090B]">
