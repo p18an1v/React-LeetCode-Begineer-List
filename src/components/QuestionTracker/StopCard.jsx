@@ -8,7 +8,7 @@ const StopCard = ({ stop, isOpen, isCompleted, toggleStop }) => {
     <Card
       onClick={toggleStop}
       className={`p-4 flex justify-between items-center cursor-pointer transition-all 
-                  bg-black border border-transparent hover:border-white/30 
+                  bg-[#18181B] border border-transparent hover:border-white/30 
                   ${isCompleted ? "border-white/40" : "border-transparent"}`}
     >
       <CardTitle className="text-xl font-semibold text-white">
