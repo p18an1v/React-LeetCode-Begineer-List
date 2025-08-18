@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import api from "@/services/api";
-import { getTopics, getPatterns, getUserProgress, trackQuestionProgress } from "@/services/userService";
+import {
+  getTopics,
+  getPatterns,
+  getUserProgress,
+  trackQuestionProgress,
+} from "@/services/userService";
 import QuestionItem from "./QuestionItem";
 import StopCard from "./StopCard";
 import ProgressCard from "./ProgressCard";
@@ -23,7 +28,8 @@ const QuestionList = ({ isLoggedIn, userId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = selectedType === "topics" ? await getTopics() : await getPatterns();
+        const response =
+          selectedType === "topics" ? await getTopics() : await getPatterns();
         if (response.data && Array.isArray(response.data)) {
           const stopsWithQuestions = await Promise.all(
             response.data.map(async (stop) => {
@@ -34,7 +40,8 @@ const QuestionList = ({ isLoggedIn, userId }) => {
               );
               return {
                 id: stop.id,
-                title: selectedType === "topics" ? stop.dataStructure : stop.pattern,
+                title:
+                  selectedType === "topics" ? stop.dataStructure : stop.pattern,
                 questions: questionsResponse.data || [],
               };
             })
@@ -75,39 +82,51 @@ const QuestionList = ({ isLoggedIn, userId }) => {
       setCompletedQuestions((prev) =>
         checked ? [...prev, questionId] : prev.filter((id) => id !== questionId)
       );
-      toast.success(`${checked ? "Marked As Completed" : "Marked As Incomplete"}`);
+      toast.success(
+        `${checked ? "Marked As Completed" : "Marked As Incomplete"}`
+      );
     } catch (err) {
       console.error("Error updating question progress:", err);
       toast.error("Failed to update question progress.");
     }
   };
 
-  const totalQuestions = stops.reduce((total, stop) => total + stop.questions.length, 0);
+  const totalQuestions = stops.reduce(
+    (total, stop) => total + stop.questions.length,
+    0
+  );
   const completedCount = completedQuestions.length;
 
   const isTopicCompleted = (questions) => {
-    return questions.every((question) => completedQuestions.includes(question.questionId));
+    return questions.every((question) =>
+      completedQuestions.includes(question.questionId)
+    );
   };
 
   if (loading) {
-  return (
-    <div className="flex justify-center items-center space-x-2 p-6">
-  <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
-  <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.2s]"></span>
-  <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.4s]"></span>
-</div>
-
-  );
-}
+    return (
+      <div className="flex justify-center items-center space-x-2 p-6">
+        <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
+        <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.2s]"></span>
+        <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.4s]"></span>
+      </div>
+    );
+  }
 
   if (error) {
     return <div className="p-6 text-red-500">{error}</div>;
   }
 
   return (
-    <div className="p-6 bg-black min-h-screen bg-black text-foreground">
-      <ProgressCard completedCount={completedCount} totalQuestions={totalQuestions} />
-      <TopicPatternDropdown selectedType={selectedType} setSelectedType={setSelectedType} />
+    <div className="p-6 min-h-screen bg-[#09090B] text-foreground">
+      <ProgressCard
+        completedCount={completedCount}
+        totalQuestions={totalQuestions}
+      />
+      <TopicPatternDropdown
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
       {stops.map((stop) => (
         <div key={stop.id} className="mb-6">
           <StopCard

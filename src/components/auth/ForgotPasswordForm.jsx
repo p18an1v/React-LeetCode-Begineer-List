@@ -38,6 +38,7 @@ const ForgotPasswordForm = ({ setFormType, setError, setResetToken }) => {
         <Input
           type="email"
           placeholder="Email"
+          className="text-black"
           {...register("email", { required: "Email is required" })}
           disabled={loading}
         />

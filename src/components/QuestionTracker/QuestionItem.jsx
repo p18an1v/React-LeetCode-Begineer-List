@@ -26,7 +26,7 @@ const QuestionItem = ({
   return (
     <Card
       className={`flex items-center p-5 bg-black transition-all 
-              border border-transparent hover:border-white/60 
+              border border-transparent hover:border-white/30 
               ${isCompleted ? "border-white/40" : "border-transparent"}`}
     >
       {isLoggedIn && (

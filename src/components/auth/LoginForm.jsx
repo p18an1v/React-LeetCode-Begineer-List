@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,17 +14,18 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
     formState: { errors },
   } = useForm();
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = async (data) => {
     setError("");
     try {
       const response = await login(data.email, data.password);
       localStorage.setItem("token", response.data.token);
       if (onLogin) onLogin();
-     
       window.location.reload();
-     // toast.success("Login successful!");
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
+      const errorMessage =
+        err.response?.data?.message || "An error occurred. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
     }
@@ -37,22 +38,41 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
         <Input
           type="email"
           placeholder="Email"
+          className="text-black"
           {...register("email", { required: "Email is required" })}
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
       </div>
 
       <div>
         <Label className="text-black">Password</Label>
-        <Input
-          type="password"
-          placeholder="Password"
-          {...register("password", {
-            required: "Password is required",
-            minLength: { value: 6, message: "Password must be at least 6 characters" },
-          })}
-        />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+        <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="text-black pr-10"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters",
+              },
+            })}
+          />
+          {/* Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700"
+          >
+            {showPassword ?  "👁️": "🙈"}
+          </button>
+        </div>
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
       </div>
 
       <Button type="submit" className="w-full">
@@ -60,12 +80,20 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
       </Button>
 
       <div className="text-center text-sm text-black mt-4">
-        <button className="text-blue-500 hover:underline" onClick={() => setFormType("forgot")}>
+        <button
+          type="button"
+          className="text-blue-500 hover:underline"
+          onClick={() => setFormType("forgot")}
+        >
           Forgot Password?
         </button>
         <p className="mt-2">
           Don't have an account?{" "}
-          <button className="text-blue-500 hover:underline" onClick={() => setFormType("register")}>
+          <button
+            type="button"
+            className="text-blue-500 hover:underline"
+            onClick={() => setFormType("register")}
+          >
             Register
           </button>
         </p>
@@ -75,4 +103,5 @@ const LoginForm = ({ onLogin, setFormType, setError }) => {
 };
 
 export default LoginForm;
+
 

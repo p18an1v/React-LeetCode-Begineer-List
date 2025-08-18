@@ -20,10 +20,10 @@ function App() {
           {/* <Route path="/" element={<LandingPage />} /> */}
           <Route path="/" element={<QuestionsPage />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/about" element={<AboutPage />} />
+          {/* <Route path="/about" element={<AboutPage />} /> */}
           <Route path="/Login" element={<LoginRegisterForm />} />
           <Route path="/questions" element={<QuestionsPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          {/* <Route path="/contact" element={<ContactPage />} /> */}
           <Route path="*" element={<ErrorPage code={404} />} />
           <Route path="/error" element={<ErrorPage code={500} />} />
         </Routes>

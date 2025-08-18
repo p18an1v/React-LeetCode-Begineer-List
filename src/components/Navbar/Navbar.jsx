@@ -73,15 +73,15 @@ export default function Navbar() {
           to="/"
           className="text-2xl font-bold tracking-wide hover:text-[hsl(225.9,70.7%,60.2%)] transition-colors duration-300"
         >
-          LeetCode Beginner List
+          Path2DSA
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8 text-lg">
           {/* {!isAdmin && <NavItem to="/">Home</NavItem>} */}
           {!isAdmin && <NavItem to="/questions">Questions</NavItem>}
-          {!isAdmin && <NavItem to="/about">About</NavItem>}
-          {!isAdmin && <NavItem to="/contact">Contact</NavItem>}
+          {/* {!isAdmin && <NavItem to="/about">About</NavItem>}
+          {!isAdmin && <NavItem to="/contact">Contact</NavItem>} */}
 
           {isLoggedIn ? (
             <Button onClick={handleLogout} variant="outline" className="text-[#09090B]">

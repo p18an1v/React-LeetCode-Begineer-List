@@ -16,28 +16,28 @@ const ErrorPage = ({ code = 404 }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 text-center px-6">
+    <div className="flex flex-col items-center justify-center h-screen bg-black text-white text-center px-6">
       {/* Logo */}
-      <img 
-         src="/errors.png" // Replace with your logo path
-        //src="/code-error.png"
-        alt="Code Logo"
-        className="w-24 h-24 mb-4"
+      <img
+        src="/errors.png" // replace with dark-compatible image (white/transparent preferred)
+        alt="Error Logo"
+        className="w-28 h-28 mb-6 invert"
       />
 
       {/* Error Title */}
-      <h1 className="text-6xl font-bold text-black-500">{errorMessages[code].title}</h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300 mt-4">{errorMessages[code].message}</p>
+      <h1 className="text-6xl font-bold">{errorMessages[code].title}</h1>
+      <p className="text-lg text-gray-300 mt-4">{errorMessages[code].message}</p>
 
       {/* Back to Home Button */}
       <Button
-        className="mt-6 px-6 py-3 text-lg hover:bg-white-600 text-white"
+        className="mt-6 px-6 py-3 text-lg bg-white text-black hover:bg-gray-200 transition"
         onClick={() => navigate("/")}
       >
-        Back to Home
+        reload
       </Button>
     </div>
   );
 };
 
 export default ErrorPage;
+
