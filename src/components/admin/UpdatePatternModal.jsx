@@ -10,7 +10,7 @@ const UpdatePatternModal = ({ isOpen, onOpenChange, updatedPatternName, setUpdat
         <DialogHeader>
           <DialogTitle>Update Pattern</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Enter Updated Pattern Name" value={updatedPatternName} onChange={(e) => setUpdatedPatternName(e.target.value)} />
+        <Input className="text-black" placeholder="Enter Updated Pattern Name" value={updatedPatternName} onChange={(e) => setUpdatedPatternName(e.target.value)} />
         <Button onClick={updatePattern}>Update Pattern</Button>
       </DialogContent>
     </Dialog>

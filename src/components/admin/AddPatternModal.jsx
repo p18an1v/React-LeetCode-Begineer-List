@@ -10,7 +10,7 @@ const AddPatternModal = ({ isOpen, onOpenChange, newPattern, setNewPattern, addP
         <DialogHeader>
           <DialogTitle>Add New Pattern</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Enter Pattern Name" value={newPattern} onChange={(e) => setNewPattern(e.target.value)} />
+        <Input className="text-black" placeholder="Enter Pattern Name" value={newPattern} onChange={(e) => setNewPattern(e.target.value)} />
         <Button onClick={addPattern}>Add Pattern</Button>
       </DialogContent>
     </Dialog>

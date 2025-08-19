@@ -10,10 +10,10 @@ const AddQuestionModal = ({ isOpen, onOpenChange, newQuestion, setNewQuestion, a
         <DialogHeader>
           <DialogTitle>Add New Question</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Question Name" value={newQuestion.questionName} onChange={(e) => setNewQuestion({ ...newQuestion, questionName: e.target.value })} />
-        <Input placeholder="URL" value={newQuestion.url} onChange={(e) => setNewQuestion({ ...newQuestion, url: e.target.value })} />
-        <Input placeholder="Level" value={newQuestion.level} onChange={(e) => setNewQuestion({ ...newQuestion, level: e.target.value })} />
-        <Input placeholder="Data Structure" value={newQuestion.dataStructure} onChange={(e) => setNewQuestion({ ...newQuestion, dataStructure: e.target.value })} />
+        <Input className="text-black" placeholder="Question Name" value={newQuestion.questionName} onChange={(e) => setNewQuestion({ ...newQuestion, questionName: e.target.value })} />
+        <Input className="text-black" placeholder="URL" value={newQuestion.url} onChange={(e) => setNewQuestion({ ...newQuestion, url: e.target.value })} />
+        <Input className="text-black" placeholder="Level" value={newQuestion.level} onChange={(e) => setNewQuestion({ ...newQuestion, level: e.target.value })} />
+        <Input className="text-black" placeholder="Data Structure" value={newQuestion.dataStructure} onChange={(e) => setNewQuestion({ ...newQuestion, dataStructure: e.target.value })} />
         <Button onClick={selectedTopic ? addQuestionToTopic : addQuestionToPattern}>Add Question</Button>
       </DialogContent>
     </Dialog>

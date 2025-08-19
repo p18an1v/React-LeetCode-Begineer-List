@@ -10,7 +10,7 @@ const AddTopicModal = ({ isOpen, onOpenChange, newTopic, setNewTopic, addTopic }
         <DialogHeader>
           <DialogTitle>Add New Topic</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Enter Topic Name" value={newTopic} onChange={(e) => setNewTopic(e.target.value)} />
+        <Input className="text-black" placeholder="Enter Topic Name" value={newTopic} onChange={(e) => setNewTopic(e.target.value)} />
         <Button onClick={addTopic}>Add Topic</Button>
       </DialogContent>
     </Dialog>

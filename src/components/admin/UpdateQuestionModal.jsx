@@ -10,10 +10,10 @@ const UpdateQuestionModal = ({ isOpen, onOpenChange, currentQuestion, setCurrent
         <DialogHeader>
           <DialogTitle>Update Question</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Question Name" value={currentQuestion?.questionName || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, questionName: e.target.value })} />
-        <Input placeholder="URL" value={currentQuestion?.url || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, url: e.target.value })} />
-        <Input placeholder="Level" value={currentQuestion?.level || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, level: e.target.value })} />
-        <Input placeholder="Data Structure" value={currentQuestion?.dataStructure || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, dataStructure: e.target.value })} />
+        <Input className="text-black" placeholder="Question Name" value={currentQuestion?.questionName || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, questionName: e.target.value })} />
+        <Input className="text-black" placeholder="URL" value={currentQuestion?.url || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, url: e.target.value })} />
+        <Input className="text-black" placeholder="Level" value={currentQuestion?.level || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, level: e.target.value })} />
+        <Input className="text-black" placeholder="Data Structure" value={currentQuestion?.dataStructure || ""} onChange={(e) => setCurrentQuestion({ ...currentQuestion, dataStructure: e.target.value })} />
         <Button onClick={updateQuestion}>Update Question</Button>
       </DialogContent>
     </Dialog>

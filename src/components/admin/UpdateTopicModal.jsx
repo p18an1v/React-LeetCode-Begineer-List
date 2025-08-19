@@ -10,7 +10,7 @@ const UpdateTopicModal = ({ isOpen, onOpenChange, updatedTopicName, setUpdatedTo
         <DialogHeader>
           <DialogTitle>Update Topic</DialogTitle>
         </DialogHeader>
-        <Input placeholder="Enter Updated Topic Name" value={updatedTopicName} onChange={(e) => setUpdatedTopicName(e.target.value)} />
+        <Input className="text-black" placeholder="Enter Updated Topic Name" value={updatedTopicName} onChange={(e) => setUpdatedTopicName(e.target.value)} />
         <Button onClick={updateTopic}>Update Topic</Button>
       </DialogContent>
     </Dialog>
